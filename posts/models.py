@@ -19,27 +19,22 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['date_created']
-
-    class Meta:
         verbose_name = _("")
         verbose_name_plural = _("s")
 
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return reverse("_detail", kwargs={"pk": self.pk})
-
 
 class PostImage(Image):
-    person = models.ForeignKey(
+    post = models.ForeignKey(
         Post, models.CASCADE, related_name='images')
 
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, models.CASCADE, related_name="comments")
     parent = models.ForeignKey(
-        "self", models.CASCADE, related_name="replies")
+        "self", models.CASCADE, related_name="replies", null=True, blank=True)
     text = models.TextField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
