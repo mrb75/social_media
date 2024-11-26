@@ -26,45 +26,45 @@ class UrlTest(APITestCase):
         self.client.credentials(
             HTTP_AUTHORIZATION='Bearer ' + str(refresh_token.access_token))
 
-    def test_people_can_add_post(self):
+    def test_person_can_add_post(self):
         self.__jwt_auth(self.person_one)
         r_add_post = self.client.post("/api/v1/posts/personal/")
         self.assertEqual(r_add_post.status_code, 201)
 
-    def test_people_can_see_personal_posts_list(self):
+    def test_person_can_see_personal_posts_list(self):
         self.__jwt_auth(self.person_one)
         r_post_list = self.client.get("/api/v1/posts/personal/")
         self.assertEqual(r_post_list.status_code, 200)
 
-    def test_people_can_see_post_detail(self):
+    def test_person_can_see_post_detail(self):
         self.__jwt_auth(self.person_one)
         post = Post.objects.create(
             person=self.person_one, caption="test is test")
         r_post_detail = self.client.get(f"/api/v1/posts/personal/{post.id}/")
         self.assertEqual(r_post_detail.status_code, 200)
 
-    def test_people_cant_see_other_person_post_detail(self):
+    def test_person_cant_see_other_person_post_detail(self):
         self.__jwt_auth(self.person_one)
         post = Post.objects.create(
             person=self.person_two, caption="test is test")
         r_post_detail = self.client.get(f"/api/v1/posts/personal/{post.id}/")
         self.assertEqual(r_post_detail.status_code, 404)
 
-    def test_people_can_edit_post_detail(self):
+    def test_person_can_edit_post_detail(self):
         self.__jwt_auth(self.person_one)
         post = Post.objects.create(
             person=self.person_one, caption="test is test")
         r_post_edit = self.client.get(f"/api/v1/posts/personal/{post.id}/")
         self.assertEqual(r_post_edit.status_code, 200)
 
-    def test_people_cant_edit_other_person_post_detail(self):
+    def test_person_cant_edit_other_person_post_detail(self):
         self.__jwt_auth(self.person_one)
         post = Post.objects.create(
             person=self.person_two, caption="test is test")
         r_post_edit = self.client.get(f"/api/v1/posts/personal/{post.id}/")
         self.assertEqual(r_post_edit.status_code, 404)
 
-    def test_people_can_remove_post(self):
+    def test_person_can_remove_post(self):
         self.__jwt_auth(self.person_one)
         post = Post.objects.create(
             person=self.person_one, caption="test is test")
@@ -72,7 +72,7 @@ class UrlTest(APITestCase):
             f"/api/v1/posts/personal/{post.id}/")
         self.assertEqual(r_post_remove.status_code, 204)
 
-    def test_people_cant_remove_other_person_post(self):
+    def test_person_cant_remove_other_person_post(self):
         self.__jwt_auth(self.person_one)
         post = Post.objects.create(
             person=self.person_two, caption="test is test")
@@ -89,14 +89,14 @@ class UrlTest(APITestCase):
     #         f"/api/v1/posts/images/add/{post.id}/", data=data, format="multipart")
     #     self.assertEqual(r_post_add_image.status_code, 200)
 
-    def test_people_can_see_post_comments(self):
+    def test_person_can_see_post_comments(self):
         self.__jwt_auth(self.person_one)
         post = Post.objects.create(
             person=self.person_two, caption="test is test")
         r_post_comments = self.client.get(f"/api/v1/posts/comments/{post.id}/")
         self.assertEqual(r_post_comments.status_code, 200)
 
-    def test_people_can_add_comment_to_post(self):
+    def test_person_can_add_comment_to_post(self):
         self.__jwt_auth(self.person_one)
         post = Post.objects.create(
             person=self.person_two, caption="test is test")
@@ -104,7 +104,7 @@ class UrlTest(APITestCase):
             f"/api/v1/posts/comments/add/{post.id}/", {"text": "texty text"})
         self.assertEqual(r_add_comment.status_code, 200)
 
-    def test_people_can_see_comment_detail(self):
+    def test_person_can_see_comment_detail(self):
         self.__jwt_auth(self.person_one)
         post = Post.objects.create(
             person=self.person_one, caption="test is test")
@@ -113,7 +113,7 @@ class UrlTest(APITestCase):
             f"/api/v1/posts/comments/detail/{comment.id}/")
         self.assertEqual(r_post_comment.status_code, 200)
 
-    def test_people_cant_see_other_person_comment_detail(self):
+    def test_person_cant_see_other_person_comment_detail(self):
         self.__jwt_auth(self.person_one)
         post = Post.objects.create(
             person=self.person_two, caption="test is test")
@@ -122,7 +122,7 @@ class UrlTest(APITestCase):
             f"/api/v1/posts/comments/detail/{comment.id}/")
         self.assertEqual(r_post_comment.status_code, 404)
 
-    def test_people_can_edit_comment_detail(self):
+    def test_person_can_edit_comment_detail(self):
         self.__jwt_auth(self.person_one)
         post = Post.objects.create(
             person=self.person_one, caption="test is test")
@@ -131,7 +131,7 @@ class UrlTest(APITestCase):
             f"/api/v1/posts/comments/edit/{comment.id}/", {"text": "texty text 2"})
         self.assertEqual(r_post_comment_edit.status_code, 200)
 
-    def test_people_cant_edit_other_person_comment_detail(self):
+    def test_person_cant_edit_other_person_comment_detail(self):
         self.__jwt_auth(self.person_one)
         post = Post.objects.create(
             person=self.person_two, caption="test is test")
@@ -140,7 +140,7 @@ class UrlTest(APITestCase):
             f"/api/v1/posts/comments/edit/{comment.id}/", {"text": "texty text 2"})
         self.assertEqual(r_post_comment_edit.status_code, 404)
 
-    def test_people_can_remove_comment_detail(self):
+    def test_person_can_remove_comment_detail(self):
         self.__jwt_auth(self.person_one)
         post = Post.objects.create(
             person=self.person_one, caption="test is test")
@@ -149,7 +149,7 @@ class UrlTest(APITestCase):
             f"/api/v1/posts/comments/remove/{comment.id}/", {"text": "texty text 2"})
         self.assertEqual(r_post_comment_remove.status_code, 204)
 
-    def test_people_cant_remove_other_person_comment_detail(self):
+    def test_person_cant_remove_other_person_comment_detail(self):
         self.__jwt_auth(self.person_one)
         post = Post.objects.create(
             person=self.person_two, caption="test is test")
